@@ -7,9 +7,13 @@
   <div class="min-h-[calc(100vh_-_64px)] flex flex-col">
     <main>
       <Container>
-        <div class="max-w-3xl mx-auto py-20">
+        <div class="max-w-3xl mx-auto py-20 space-y-5">
           <TodoForm @submitForm="handleFormValue" />
-          <todoList :todoList="todoList" @removeTodo="handleRemove" />
+          <todoList
+            :todoList="todoList"
+            @removeTodo="handleRemove"
+            @updateSelectedTodo="updateSelectedTodo"
+          />
         </div>
       </Container>
     </main>
@@ -58,6 +62,9 @@ export default {
     },
     handleRemove(todo) {
       this.todoList = this.todoList.filter((el) => el != todo);
+    },
+    updateSelectedTodo({ todo, value }) {
+      todo.text = value;
     },
   },
 };

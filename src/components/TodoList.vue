@@ -34,6 +34,7 @@
       :selectedTodo="selectedTodo"
       :isModalOpen="isModalOpen"
       @close-modal="closeModal"
+      @updateSelectedTodo="$emit('updateSelectedTodo', $event)"
     />
   </div>
 </template>

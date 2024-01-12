@@ -37,14 +37,24 @@
               <div class="mt-4">
                 <input
                   type="text"
-                  v-model="selectedTodo.text"
+                  v-model="inputValue"
                   class="w-full h-12 rounded-md border border-gray-300 px-4 focus:border-sky-500 outline-none"
                 />
               </div>
 
-              <div class="mt-4">
-                <button @click="$emit('closeModal')">Cancel</button>
-                <button>Update</button>
+              <div class="mt-4 space-x-4 flex justify-end">
+                <button
+                  @click="$emit('closeModal')"
+                  class="inline-block px-4 py-3 bg-primary text-white font-semibold rounded-md leading-tight"
+                >
+                  Cancel
+                </button>
+                <button
+                  @click="updateTodo"
+                  class="inline-block px-4 py-3 bg-primary text-white font-semibold rounded-md leading-tight"
+                >
+                  Update
+                </button>
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -71,5 +81,19 @@ export default {
     DialogTitle,
   },
   props: ["isModalOpen", "selectedTodo"],
+  data() {
+    return {
+      inputValue: this.selectedTodo.text,
+    };
+  },
+  methods: {
+    updateTodo() {
+      this.$emit("updateSelectedTodo", {
+        todo: this.selectedTodo,
+        value: this.inputValue,
+      });
+      this.$emit("closeModal");
+    },
+  },
 };
 </script>

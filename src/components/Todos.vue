@@ -1,25 +1,3 @@
-<script>
-import { PencilSquareIcon, TrashIcon } from "@heroicons/vue/24/solid";
-export default {
-  components: {
-    TrashIcon,
-    PencilSquareIcon,
-  },
-  props: {
-    todos: Array,
-  },
-  data() {
-    return {
-      isDone: "line-through",
-    };
-  },
-  methods: {
-    removeTodo(todo) {
-      this.$emit("removeTodo", todo);
-    },
-  },
-};
-</script>
 <template>
   <ul class="space-y-5">
     <li
@@ -39,7 +17,7 @@ export default {
         {{ todo.text }}
       </p>
       <div class="absolute right-0 top-0 z-10 space-x-4">
-        <button>
+        <button @click="editTodo(todo)">
           <PencilSquareIcon class="h-6 w-6 text-gray-700 hover:text-blue-500" />
         </button>
         <button @click="removeTodo(todo)">
@@ -48,7 +26,43 @@ export default {
       </div>
     </li>
   </ul>
+  <EditTodo
+    v-if="showModal && currentTodo"
+    :currentTodo="currentTodo"
+    :showModal="showModal"
+    @closeUpdateModal="$emit('closeUpdateModal', $event)"
+  />
 </template>
+
+<script>
+import { PencilSquareIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import EditTodo from "@/components/UpdateTodoModal.vue";
+export default {
+  components: {
+    TrashIcon,
+    PencilSquareIcon,
+    EditTodo,
+  },
+  props: {
+    todos: Array,
+    showModal: Boolean,
+    currentTodo: Object,
+  },
+  data() {
+    return {
+      isDone: "line-through",
+    };
+  },
+  methods: {
+    removeTodo(todo) {
+      this.$emit("removeTodo", todo);
+    },
+    editTodo(todo) {
+      this.$emit("editTodo", todo);
+    },
+  },
+};
+</script>
 
 <style>
 .h-6 {

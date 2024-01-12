@@ -1,5 +1,5 @@
 <template>
-  <TransitionRoot appear :show="showModal" as="template">
+  <TransitionRoot appear :show="isModalOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
         as="template"
@@ -37,13 +37,13 @@
               <div class="mt-4">
                 <input
                   type="text"
-                  v-model="currentTodo.text"
+                  v-model="selectedTodo.text"
                   class="w-full h-12 rounded-md border border-gray-300 px-4 focus:border-sky-500 outline-none"
                 />
               </div>
 
               <div class="mt-4">
-                <button @click="closeModal">Cancel</button>
+                <button @click="$emit('closeModal')">Cancel</button>
                 <button>Update</button>
               </div>
             </DialogPanel>
@@ -62,6 +62,7 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 export default {
+  name: "Todo Update Modal",
   components: {
     TransitionRoot,
     TransitionChild,
@@ -69,11 +70,6 @@ export default {
     DialogPanel,
     DialogTitle,
   },
-  props: ["currentTodo", "showModal"],
-  methods: {
-    closeModal() {
-      this.$emit("closeUpdateModal");
-    },
-  },
+  props: ["isModalOpen", "selectedTodo"],
 };
 </script>

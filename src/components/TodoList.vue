@@ -23,24 +23,20 @@
               class="h-6 w-6 text-gray-700 hover:text-blue-500"
             />
           </button>
-          <button @click="$emit('removeTodo', todo)">
+          <button @click="deleteTodo(todo)">
             <TrashIcon class="h-6 w-6 text-gray-700 hover:text-blue-500" />
           </button>
         </div>
       </li>
     </ul>
-    <UpdateTodoModal
-      v-if="isModalOpen && selectedTodo"
-      :selectedTodo="selectedTodo"
-      :isModalOpen="isModalOpen"
-      @close-modal="closeModal"
-      @updateSelectedTodo="$emit('updateSelectedTodo', $event)"
-    />
+    <UpdateTodoModal v-if="isModalOpen && selectedTodo" />
   </div>
 </template>
 <script>
 import { PencilSquareIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import UpdateTodoModal from "@/components/UpdateTodoModal.vue";
+import { mapState } from "pinia";
+import { useTodo } from "@/stores/Stores";
 export default {
   name: "Todo List",
   components: {
@@ -48,26 +44,15 @@ export default {
     PencilSquareIcon,
     UpdateTodoModal,
   },
-  props: {
-    todoList: Array,
-    showModal: Boolean,
-    currentTodo: Object,
-  },
-  data() {
-    return {
-      isDone: "line-through",
-      isModalOpen: false,
-      selectedTodo: null,
-    };
-  },
-  methods: {
-    updateTodo(todo) {
-      this.selectedTodo = todo;
-      this.isModalOpen = true;
-    },
-    closeModal() {
-      this.isModalOpen = false;
-    },
+  computed: {
+    ...mapState(useTodo, [
+      "todoList",
+      "isDone",
+      "isModalOpen",
+      "selectedTodo",
+      "updateTodo",
+      "deleteTodo",
+    ]),
   },
 };
 </script>

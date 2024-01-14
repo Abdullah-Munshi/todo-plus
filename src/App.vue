@@ -8,12 +8,8 @@
     <main>
       <Container>
         <div class="max-w-3xl mx-auto py-20 space-y-5">
-          <TodoForm @submitForm="handleFormValue" />
-          <todoList
-            :todoList="todoList"
-            @removeTodo="handleRemove"
-            @updateSelectedTodo="updateSelectedTodo"
-          />
+          <TodoForm />
+          <todoList />
         </div>
       </Container>
     </main>
@@ -32,7 +28,9 @@
 import TodoForm from "@/components/TodoForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import Container from "@/components/utilites/Container.vue";
-let id = 0;
+import { mapState } from "pinia";
+import { useTodo } from "@/stores/Stores";
+
 export default {
   name: "App",
   components: {
@@ -40,32 +38,8 @@ export default {
     TodoList,
     Container,
   },
-  data() {
-    return {
-      todoText: "",
-      todoList: [
-        { id: id++, text: "Need to update the app", isDone: true },
-        { id: id++, text: "Revision module", isDone: true },
-        { id: id++, text: "Some Text", isDone: true },
-        { id: id++, text: "Some Text", isDone: true },
-      ],
-      title: "This is Demo Title",
-    };
-  },
-  methods: {
-    handleFormValue(values) {
-      this.todoList.push({
-        id: id++,
-        text: values.todoName,
-        isDone: false,
-      });
-    },
-    handleRemove(todo) {
-      this.todoList = this.todoList.filter((el) => el != todo);
-    },
-    updateSelectedTodo({ todo, value }) {
-      todo.text = value;
-    },
+  computed: {
+    ...mapState(useTodo, ["todoList"]),
   },
 };
 </script>

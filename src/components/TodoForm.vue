@@ -27,14 +27,14 @@
 </template>
 
 <script>
+import { mapWritableState } from "pinia";
+import { useTodo } from "@/stores/Stores";
 import { useToast } from "vue-toast-notification";
 const toast = useToast();
 export default {
   name: "Todo Form",
-  data() {
-    return {
-      todoName: "",
-    };
+  computed: {
+    ...mapWritableState(useTodo, ["handleFormValue", "todoName"]),
   },
   methods: {
     addTodo() {
@@ -42,7 +42,7 @@ export default {
         toast.error("Fields must be filled!");
         return;
       } else if (this.todoName) {
-        this.$emit("submitForm", { todoName: this.todoName });
+        this.handleFormValue({ todoName: this.todoName });
         this.todoName = "";
         toast.success("Todo is submitted Successfully!");
       }

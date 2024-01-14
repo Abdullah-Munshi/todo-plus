@@ -37,14 +37,14 @@
               <div class="mt-4">
                 <input
                   type="text"
-                  v-model="inputValue"
+                  v-model="selectedTodo.text"
                   class="w-full h-12 rounded-md border border-gray-300 px-4 focus:border-sky-500 outline-none"
                 />
               </div>
 
               <div class="mt-4 space-x-4 flex justify-end">
                 <button
-                  @click="$emit('closeModal')"
+                  @click="closeModal"
                   class="inline-block px-4 py-3 bg-primary text-white font-semibold rounded-md leading-tight"
                 >
                   Cancel
@@ -71,6 +71,8 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+import { mapState } from "pinia";
+import { useTodo } from "@/stores/Stores";
 export default {
   name: "Todo Update Modal",
   components: {
@@ -80,19 +82,21 @@ export default {
     DialogPanel,
     DialogTitle,
   },
-  props: ["isModalOpen", "selectedTodo"],
-  data() {
-    return {
-      inputValue: this.selectedTodo.text,
-    };
+  computed: {
+    ...mapState(useTodo, [
+      "isModalOpen",
+      "selectedTodo",
+      "closeModal",
+      "updateSelectedTodo",
+    ]),
   },
   methods: {
     updateTodo() {
-      this.$emit("updateSelectedTodo", {
+      this.updateSelectedTodo({
         todo: this.selectedTodo,
-        value: this.inputValue,
+        value: this.selectedTodo.text,
       });
-      this.$emit("closeModal");
+      this.closeModal();
     },
   },
 };
